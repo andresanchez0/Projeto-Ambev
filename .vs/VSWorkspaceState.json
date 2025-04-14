@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\tests",
+    "\\backend\\tests\\Ambev.DeveloperEvaluation.Unit",
+    "\\backend\\tests\\Ambev.DeveloperEvaluation.Unit\\Application",
+    "\\backend\\tests\\Ambev.DeveloperEvaluation.Unit\\Application\\Services",
+    "\\backend\\tests\\Ambev.DeveloperEvaluation.Unit\\Application\\Services\\Sales"
+  ],
+  "SelectedNode": "\\backend\\tests\\Ambev.DeveloperEvaluation.Unit\\Application\\Services\\Sales\\SaleServiceTests.cs",
+  "PreviewInSolutionExplorer": false
+}
