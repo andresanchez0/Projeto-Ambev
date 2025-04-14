@@ -1,86 +1,119 @@
-# Developer Evaluation Project
+README.md – Projeto Ambev Developer Evaluation
 
-`READ CAREFULLY`
+# Ambev Developer Evaluation
 
-## Instructions
-**The test below will have up to 7 calendar days to be delivered from the date of receipt of this manual.**
+Este projeto foi desenvolvido como parte do processo seletivo da Ambev Tech. A aplicação segue os princípios da *Clean Architecture*, utilizando C#, .NET 8, Entity Framework Core, PostgreSQL, testes automatizados (unitários e de integração) e autenticação via JWT.
 
-- The code must be versioned in a public Github repository and a link must be sent for evaluation once completed
-- Upload this template to your repository and start working from it
-- Read the instructions carefully and make sure all requirements are being addressed
-- The repository must provide instructions on how to configure, execute and test the project
-- Documentation and overall organization will also be taken into consideration
+---
 
-## Use Case
-**You are a developer on the DeveloperStore team. Now we need to implement the API prototypes.**
+## Estrutura do Projeto
 
-As we work with `DDD`, to reference entities from other domains, we use the `External Identities` pattern with denormalization of entity descriptions.
 
-Therefore, you will write an API (complete CRUD) that handles sales records. The API needs to be able to inform:
+src/
+├── Ambev.DeveloperEvaluation.WebApi       # Camada de apresentação (API)
+├── Ambev.DeveloperEvaluation.Application  # Regras de negócio (Services, DTOs, Interfaces)
+├── Ambev.DeveloperEvaluation.Domain       # Entidades e interfaces de repositório
+├── Ambev.DeveloperEvaluation.ORM          # Persistência com Entity Framework (PostgreSQL)
+├── Ambev.DeveloperEvaluation.IoC          # Injeção de dependência (Module Initializers)
+├── Tests/
+│   ├── Unit/                               # Testes unitários (Application & Domain)
+│   ├── Integration/                        # Testes de integração com banco real (Docker)
+│   └── Functional/                         # (Reservado para testes de API)
+└── docker-compose/                        # Arquivos Docker
 
-* Sale number
-* Date when the sale was made
-* Customer
-* Total sale amount
-* Branch where the sale was made
-* Products
-* Quantities
-* Unit prices
-* Discounts
-* Total amount for each item
-* Cancelled/Not Cancelled
 
-It's not mandatory, but it would be a differential to build code for publishing events of:
-* SaleCreated
-* SaleModified
-* SaleCancelled
-* ItemCancelled
+---
 
-If you write the code, **it's not required** to actually publish to any Message Broker. You can log a message in the application log or however you find most convenient.
+ Tecnologias Utilizadas
 
-### Business Rules
+.NET 8
 
-* Purchases above 4 identical items have a 10% discount
-* Purchases between 10 and 20 identical items have a 20% discount
-* It's not possible to sell above 20 identical items
-* Purchases below 4 items cannot have a discount
+ASP.NET Core
 
-These business rules define quantity-based discounting tiers and limitations:
+Entity Framework Core
 
-1. Discount Tiers:
-   - 4+ items: 10% discount
-   - 10-20 items: 20% discount
+PostgreSQL
 
-2. Restrictions:
-   - Maximum limit: 20 items per product
-   - No discounts allowed for quantities below 4 items
+Docker + Docker Compose
 
-## Overview
-This section provides a high-level overview of the project and the various skills and competencies it aims to assess for developer candidates. 
+Testcontainers para testes de integração
 
-See [Overview](/.doc/overview.md)
+FluentAssertions & Moq
 
-## Tech Stack
-This section lists the key technologies used in the project, including the backend, testing, frontend, and database components. 
+xUnit
 
-See [Tech Stack](/.doc/tech-stack.md)
+JWT Authentication
 
-## Frameworks
-This section outlines the frameworks and libraries that are leveraged in the project to enhance development productivity and maintainability. 
+AutoMapper
 
-See [Frameworks](/.doc/frameworks.md)
+MediatR
 
-<!-- 
-## API Structure
-This section includes links to the detailed documentation for the different API resources:
-- [API General](./docs/general-api.md)
-- [Products API](/.doc/products-api.md)
-- [Carts API](/.doc/carts-api.md)
-- [Users API](/.doc/users-api.md)
-- [Auth API](/.doc/auth-api.md)
--->
 
-## Project Structure
-This section describes the overall structure and organization of the project files and directories. 
 
-See [Project Structure](/.doc/project-structure.md)
+---
+
+Como Rodar o Projeto
+
+Pré-requisitos
+
+.NET 8 SDK
+
+Docker
+
+
+1. Subir o PostgreSQL via Docker
+
+docker-compose -f docker-compose.yml up -d
+
+2. Criar as Migrations
+
+cd src/Ambev.DeveloperEvaluation.ORM
+dotnet ef migrations add InitialCreate --project Ambev.DeveloperEvaluation.ORM --startup-project ../Ambev.DeveloperEvaluation.WebApi
+dotnet ef database update --project Ambev.DeveloperEvaluation.ORM --startup-project ../Ambev.DeveloperEvaluation.WebApi
+
+3. Rodar a API
+
+Via Visual Studio (F5) ou terminal:
+dotnet run --project src/Ambev.DeveloperEvaluation.WebApi
+
+A API estará disponível em:
+https://localhost:7181/swagger/index.html
+
+
+---
+
+Testes Automatizados
+
+Testes Unitários
+dotnet test tests/Ambev.DeveloperEvaluation.Unit
+Testes de Integração (com PostgreSQL real)
+dotnet test tests/Ambev.DeveloperEvaluation.Integration
+Estes testes utilizam o Testcontainers para rodar uma instância real do PostgreSQL automaticamente via Docker.
+
+
+---
+
+Funcionalidades Implementadas
+
+[x] Cadastro de vendas com validação de regras de negócio
+[x] Aplicação automática de descontos (10% e 20%)
+[x] Limite de quantidade por item
+[x] Listagem, atualização e cancelamento de vendas
+[x] Separação entre controller, service e repository
+[x] Testes unitários da camada Application e Domain
+[x] Testes de integração com banco real
+[x] Injeção de dependência modular (IoC)
+[x] Swagger + JWT Authentication
+
+
+
+---
+
+ Considerações Finais
+
+Este projeto foi estruturado para demonstrar domínio de:
+Boas práticas de desenvolvimento com C# e .NET
+Clean Architecture
+Testes confiáveis (unit e integration)
+Integração com infraestrutura real (banco Docker)
+Manutenibilidade e clareza de código.
